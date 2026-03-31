@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Collection Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f8fb; color: #1d1d1f; }
+        .card { max-width: 860px; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        label { display: block; margin-top: 16px; font-weight: 700; }
+        input, textarea { width: 100%; margin-top: 8px; padding: 12px; border: 1px solid #d9d9df; border-radius: 10px; box-sizing: border-box; }
+        textarea { min-height: 140px; resize: vertical; }
+        .actions { display: flex; gap: 12px; margin-top: 24px; }
+        button, a.button { background: #111827; color: white; border: none; border-radius: 10px; padding: 12px 16px; text-decoration: none; cursor: pointer; }
+        .secondary { background: #e5e7eb; color: #111827; }
+        .error { color: #b91c1c; font-size: 0.92rem; margin-top: 6px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1 th:text="${pageTitle}">Collection Form</h1>
+
+    <form th:action="${formAction}" th:object="${collectionForm}" method="post">
+        <label for="name">Name</label>
+        <input id="name" type="text" th:field="*{name}" placeholder="Enter collection name">
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+        <label for="description">Description</label>
+        <textarea id="description" th:field="*{description}" placeholder="Describe the collection"></textarea>
+        <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+
+        <div class="actions">
+            <button type="submit" th:text="${editMode} ? 'Update Collection' : 'Create Collection'">Save</button>
+            <a class="button secondary" th:href="${editMode} ? '/manage/collections/' + collectionId : '/collections'">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

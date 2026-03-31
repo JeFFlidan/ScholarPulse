@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:./scholarpulse.db
+    driver-class-name: org.sqlite.JDBC
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+        format_sql: true
+    show-sql: false
+
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8080
+
+scholarpulse:
+  openalex:
+    base-url: https://api.openalex.org
+    api-key: djxD9q3CqTj3O2kEWLrvzF
+    default-per-page: 10

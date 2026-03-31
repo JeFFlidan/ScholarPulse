@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Article</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f8fb; color: #1d1d1f; }
+        .card { max-width: 980px; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        label { display: block; margin-top: 16px; font-weight: 700; }
+        input, textarea { width: 100%; margin-top: 8px; padding: 12px; border: 1px solid #d9d9df; border-radius: 10px; box-sizing: border-box; }
+        textarea { min-height: 160px; resize: vertical; }
+        .actions { display: flex; gap: 12px; margin-top: 24px; }
+        button, a.button { background: #111827; color: white; border: none; border-radius: 10px; padding: 12px 16px; text-decoration: none; cursor: pointer; }
+        .secondary { background: #e5e7eb; color: #111827; }
+        .error { color: #b91c1c; font-size: 0.92rem; margin-top: 6px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Edit Article</h1>
+    <p><strong>Topic:</strong> <span th:text="${article.topicName}">Topic</span></p>
+
+    <form th:action="@{/manage/articles/{id}(id=${article.id})}" th:object="${articleForm}" method="post">
+        <label for="title">Title</label>
+        <input id="title" type="text" th:field="*{title}">
+        <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+
+        <label for="authors">Authors</label>
+        <textarea id="authors" th:field="*{authors}"></textarea>
+
+        <label for="abstractText">Abstract</label>
+        <textarea id="abstractText" th:field="*{abstractText}"></textarea>
+
+        <label for="publicationYear">Publication Year</label>
+        <input id="publicationYear" type="number" th:field="*{publicationYear}">
+
+        <label for="doi">DOI</label>
+        <input id="doi" type="text" th:field="*{doi}">
+
+        <label for="url">URL</label>
+        <input id="url" type="text" th:field="*{url}">
+
+        <label for="sourceName">Source Name</label>
+        <input id="sourceName" type="text" th:field="*{sourceName}">
+
+        <label for="citationCount">Citation Count</label>
+        <input id="citationCount" type="number" th:field="*{citationCount}">
+
+        <div class="actions">
+            <button type="submit">Update Article</button>
+            <a class="button secondary" th:href="@{/manage/articles}">Back</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

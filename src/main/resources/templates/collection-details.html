@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${collection.name}">Collection Details</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f8fb; color: #1d1d1f; }
+        .row { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 24px; }
+        .card { background: white; border-radius: 16px; padding: 22px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); flex: 1; }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+        button, a.button { background: #111827; color: white; border: none; border-radius: 10px; padding: 10px 14px; text-decoration: none; cursor: pointer; }
+        .danger { background: #b91c1c; }
+        .secondary { background: #e5e7eb; color: #111827; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        th, td { padding: 12px; border-bottom: 1px solid #ececf2; text-align: left; vertical-align: top; }
+        select { width: 100%; padding: 12px; border: 1px solid #d9d9df; border-radius: 10px; margin-top: 8px; }
+        .flash-ok { padding: 12px 14px; background: #dcfce7; color: #166534; border-radius: 10px; margin-bottom: 16px; }
+        .flash-error { padding: 12px 14px; background: #fee2e2; color: #991b1b; border-radius: 10px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+<div th:if="${successMessage}" class="flash-ok" th:text="${successMessage}"></div>
+<div th:if="${errorMessage}" class="flash-error" th:text="${errorMessage}"></div>
+
+<div class="row">
+    <div class="card">
+        <h1 th:text="${collection.name}">Collection</h1>
+        <p th:text="${collection.description}">Description</p>
+        <p><strong>Articles in collection:</strong> <span th:text="${collection.articleCount}">0</span></p>
+
+        <div class="actions">
+            <a class="button" th:href="@{/manage/collections/{id}/edit(id=${collection.id})}">Edit</a>
+            <a class="button secondary" th:href="@{/collections}">Back to Collections</a>
+            <form th:action="@{/manage/collections/{id}/delete(id=${collection.id})}" method="post" style="display:inline;">
+                <button type="submit" class="danger">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Add Article to Collection</h2>
+        <form th:action="@{/manage/collections/{id}/articles(id=${collection.id})}" th:object="${attachArticleForm}" method="post">
+            <label for="articleId"><strong>Available articles</strong></label>
+            <select id="articleId" th:field="*{articleId}">
+                <option value="">Select article</option>
+                <option th:each="article : ${availableArticles}"
+                        th:value="${article.id}"
+                        th:text="${article.title + ' (' + article.topicName + ')'}">
+                </option>
+            </select>
+            <div class="actions">
+                <button type="submit">Attach Article</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h2>Articles in this Collection</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Topic</th>
+        <th>Authors</th>
+        <th>Year</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(attachedArticles)}">
+        <td colspan="5">No articles attached yet.</td>
+    </tr>
+    <tr th:each="article : ${attachedArticles}">
+        <td th:text="${article.title}">Title</td>
+        <td th:text="${article.topicName}">Topic</td>
+        <td th:text="${article.authors}">Authors</td>
+        <td th:text="${article.publicationYear}">2026</td>
+        <td>
+            <a class="button" th:href="@{/manage/articles/{id}/edit(id=${article.id})}">Edit</a>
+            <form th:action="@{/manage/collections/{collectionId}/articles/{articleId}/delete(collectionId=${collection.id}, articleId=${article.id})}" method="post" style="display:inline;">
+                <button type="submit" class="danger">Remove</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

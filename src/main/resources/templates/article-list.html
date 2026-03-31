@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f8fb; color: #1d1d1f; }
+        .toolbar { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+        input[type="text"] { padding: 12px; width: 320px; border: 1px solid #d9d9df; border-radius: 10px; }
+        button, a.button { background: #111827; color: white; border: none; border-radius: 10px; padding: 10px 14px; text-decoration: none; cursor: pointer; }
+        .secondary { background: #e5e7eb; color: #111827; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        th, td { padding: 12px; border-bottom: 1px solid #ececf2; text-align: left; vertical-align: top; }
+        .danger { background: #b91c1c; }
+    </style>
+</head>
+<body>
+<h1>Articles</h1>
+
+<form method="get" th:action="@{/manage/articles}" class="toolbar">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by title">
+    <button type="submit">Search</button>
+    <a class="button secondary" th:href="@{/manage/articles}">Reset</a>
+    <a class="button secondary" th:href="@{/topics}">Topics</a>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Topic</th>
+        <th>Authors</th>
+        <th>Year</th>
+        <th>Source</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(articles)}">
+        <td colspan="6">No articles found.</td>
+    </tr>
+    <tr th:each="article : ${articles}">
+        <td th:text="${article.title}">Title</td>
+        <td th:text="${article.topicName}">Topic</td>
+        <td th:text="${article.authors}">Authors</td>
+        <td th:text="${article.publicationYear}">2026</td>
+        <td th:text="${article.sourceName}">Source</td>
+        <td>
+            <a class="button" th:href="@{/manage/articles/{id}/edit(id=${article.id})}">Edit</a>
+            <form th:action="@{/manage/articles/{id}/delete(id=${article.id})}" method="post" style="display:inline;">
+                <button type="submit" class="danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

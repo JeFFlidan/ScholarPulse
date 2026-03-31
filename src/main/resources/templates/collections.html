@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Collections</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f8fb; }
+        .card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #e7e7e7; text-align: left; }
+        .toolbar { display: flex; gap: 12px; margin-bottom: 18px; }
+        a.button { background: #111827; color: white; padding: 10px 14px; border-radius: 10px; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="toolbar">
+    <a class="button" th:href="@{/manage/collections/new}">Create Collection</a>
+</div>
+
+<div class="card">
+    <h1>Collections</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Created At</th>
+            <th>Articles</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="collection : ${collections}">
+            <td th:text="${collection.id}">1</td>
+            <td><a th:href="@{/manage/collections/{id}(id=${collection.id})}" th:text="${collection.name}">Reading List</a></td>
+            <td th:text="${collection.description}">Important papers</td>
+            <td th:text="${collection.createdAt}">2026-03-29T20:00</td>
+            <td th:text="${collection.articleCount}">0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

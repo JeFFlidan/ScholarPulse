@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${topic.name}">Topic Details</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f8fb; color: #1d1d1f; }
+        .row { display: flex; gap: 24px; align-items: stretch; margin-bottom: 24px; }
+        .card { background: white; border-radius: 16px; padding: 22px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); flex: 1; }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+        button, a.button { background: #111827; color: white; border: none; border-radius: 10px; padding: 10px 14px; text-decoration: none; cursor: pointer; }
+        .danger { background: #b91c1c; }
+        .secondary { background: #e5e7eb; color: #111827; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        th, td { padding: 12px; border-bottom: 1px solid #ececf2; text-align: left; vertical-align: top; }
+        .flash { padding: 12px 14px; background: #dcfce7; color: #166534; border-radius: 10px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+<div th:if="${successMessage}" class="flash" th:text="${successMessage}"></div>
+
+<div class="row">
+    <div class="card">
+        <h1 th:text="${topic.name}">Topic</h1>
+        <p th:text="${topic.description}">Description</p>
+        <p><strong>Search query:</strong> <span th:text="${topic.searchQuery}">query</span></p>
+        <p><strong>Imported articles:</strong> <span th:text="${topic.articleCount}">0</span></p>
+
+        <div class="actions">
+            <a class="button" th:href="@{/manage/topics/{id}/edit(id=${topic.id})}">Edit</a>
+            <a class="button secondary" th:href="@{/manage/articles}">All Articles</a>
+            <a class="button secondary" th:href="@{/topics}">Back to Topics</a>
+            <form th:action="@{/manage/topics/{id}/delete(id=${topic.id})}" method="post" style="display:inline;">
+                <button type="submit" class="danger">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Import from OpenAlex</h2>
+        <form th:action="@{/manage/topics/{id}/import(id=${topic.id})}" method="post">
+            <label for="limit"><strong>Number of articles</strong></label>
+            <input id="limit" type="number" name="limit" min="1" max="50" value="10" style="margin-top:8px; padding:10px; width:140px; border-radius:10px; border:1px solid #d9d9df;">
+            <div class="actions">
+                <button type="submit">Import Articles</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h2>Articles for this Topic</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Authors</th>
+        <th>Year</th>
+        <th>Source</th>
+        <th>Citations</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(articles)}">
+        <td colspan="6">No articles imported yet.</td>
+    </tr>
+    <tr th:each="article : ${articles}">
+        <td th:text="${article.title}">Title</td>
+        <td th:text="${article.authors}">Authors</td>
+        <td th:text="${article.publicationYear}">2026</td>
+        <td th:text="${article.sourceName}">Source</td>
+        <td th:text="${article.citationCount}">0</td>
+        <td>
+            <a class="button" th:href="@{/manage/articles/{id}/edit(id=${article.id})}">Edit</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
